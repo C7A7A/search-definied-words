@@ -4,25 +4,32 @@ using SearchDefinedWords.Models;
 namespace SearchDefinedWords.Services {
     public class SearchProfileService : ISearchProfileService {
         private IMemoryCache cache;
+        private string cacheIdKey;
 
         public SearchProfileService(IMemoryCache cache) {
             this.cache = cache;
+            this.cacheIdKey = "currentId";
         }
 
         public IEnumerable<SearchProfile> getProfiles() {
-            int id = GetSearchProfileId();
+            if (cache.TryGetValue(this.cacheIdKey, out int cacheId)) {
+                return GetAllProfiles(cacheId);
+            }
 
-            return GetAllProfiles(id);
+            return new List<SearchProfile>();
         }
 
-        private IEnumerable<SearchProfile> GetAllProfiles(int id) {
+        private IEnumerable<SearchProfile> GetAllProfiles(int highestId) {
             List<SearchProfile> profiles = new List<SearchProfile>();
 
-            for (int i = 0; i < id; i++) {
-                cache.TryGetValue(i, out int profileId);
-                List<string> words = (List<string>)cache.Get(profileId);
+            for (int i = 0; i <= highestId; i++) {
+                List<string> words = cache.Get<List<string>>(i);
 
-                profiles.Add(new SearchProfile(id, words));
+                foreach (var word in words) {
+                    Console.WriteLine(word);
+                }
+
+                profiles.Add(new SearchProfile(highestId, words));
             }
 
             return profiles;
@@ -31,14 +38,14 @@ namespace SearchDefinedWords.Services {
         public SearchProfile AddProfile(SearchProfile searchProfile) {
             int id = GetSearchProfileId();
             searchProfile.Id = id;
-
+            Console.WriteLine($"save profile with {id}");
             return SaveSearchProfile(searchProfile);
         }
 
         private SearchProfile SaveSearchProfile(SearchProfile searchProfile) {
             var cacheOptions = new MemoryCacheEntryOptions()
                     .SetSlidingExpiration(TimeSpan.FromMinutes(30));
-
+            
             cache.Set(searchProfile.Id, searchProfile.Words, cacheOptions);
 
             return searchProfile;
@@ -46,24 +53,21 @@ namespace SearchDefinedWords.Services {
 
         // basic id autoincrement
         private int GetSearchProfileId() {
-            string cacheIdKey = "currentId";
-
             var cacheIdOptions = new MemoryCacheEntryOptions()
                     .SetSlidingExpiration(TimeSpan.FromMinutes(30));
 
             // if there is already id -> increment by 1
-            if (cache.TryGetValue(cacheIdKey, out int cacheId)) {
-                Console.WriteLine("Before: {0}", cacheId);
-                cache.Remove(cacheIdKey);
-                cache.Set(cacheIdKey, ++cacheId, cacheIdOptions);
+            if (cache.TryGetValue(this.cacheIdKey, out int cacheId)) {
+                cache.Remove(this.cacheIdKey);
+                cacheId++;
+                cache.Set(this.cacheIdKey, cacheId, cacheIdOptions);
             } 
             // if there is no id -> create id = 1
             else {
                 cacheId = 0;
-                cache.Set(cacheIdKey, cacheId, cacheIdOptions);
+                cache.Set(this.cacheIdKey, cacheId, cacheIdOptions);
             }
 
-            Console.WriteLine("After: {0}", cacheId);
             return cacheId;
         }
     }
