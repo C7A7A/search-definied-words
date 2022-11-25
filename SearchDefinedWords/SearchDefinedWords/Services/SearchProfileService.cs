@@ -25,9 +25,11 @@ namespace SearchDefinedWords.Services {
             for (int i = 0; i <= highestId; i++) {
                 List<string> words = cache.Get<List<string>>(i);
 
+                /*
                 foreach (var word in words) {
                     Console.WriteLine(word);
                 }
+                */
 
                 profiles.Add(new SearchProfile(highestId, words));
             }
@@ -38,7 +40,7 @@ namespace SearchDefinedWords.Services {
         public SearchProfile AddProfile(SearchProfile searchProfile) {
             int id = GetSearchProfileId();
             searchProfile.Id = id;
-            Console.WriteLine($"save profile with {id}");
+            //Console.WriteLine($"save profile with {id}");
             return SaveSearchProfile(searchProfile);
         }
 
