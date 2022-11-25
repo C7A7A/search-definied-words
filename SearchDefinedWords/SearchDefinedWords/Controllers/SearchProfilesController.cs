@@ -14,6 +14,11 @@ namespace SearchDefinedWords.Controllers {
             this.searchProfilesService = searchProfilesService;
         }
 
+        [HttpGet]
+        public IEnumerable<SearchProfile> Get() {
+            return searchProfilesService.getProfiles();
+        }
+
         [HttpPost]
         public ObjectResult Post([FromBody] SearchProfile searchProfile) {
             SearchProfile profile = searchProfilesService.AddProfile(searchProfile);

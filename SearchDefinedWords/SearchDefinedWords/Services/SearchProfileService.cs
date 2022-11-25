@@ -9,6 +9,25 @@ namespace SearchDefinedWords.Services {
             this.cache = cache;
         }
 
+        public IEnumerable<SearchProfile> getProfiles() {
+            int id = GetSearchProfileId();
+
+            return GetAllProfiles(id);
+        }
+
+        private IEnumerable<SearchProfile> GetAllProfiles(int id) {
+            List<SearchProfile> profiles = new List<SearchProfile>();
+
+            for (int i = 0; i < id; i++) {
+                cache.TryGetValue(i, out int profileId);
+                List<string> words = (List<string>)cache.Get(profileId);
+
+                profiles.Add(new SearchProfile(id, words));
+            }
+
+            return profiles;
+        }
+
         public SearchProfile AddProfile(SearchProfile searchProfile) {
             int id = GetSearchProfileId();
             searchProfile.Id = id;
@@ -40,7 +59,7 @@ namespace SearchDefinedWords.Services {
             } 
             // if there is no id -> create id = 1
             else {
-                cacheId = 1;
+                cacheId = 0;
                 cache.Set(cacheIdKey, cacheId, cacheIdOptions);
             }
 
