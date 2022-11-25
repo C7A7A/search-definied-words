@@ -1,10 +1,14 @@
-﻿namespace SearchDefinedWords.Models {
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+
+namespace SearchDefinedWords.Models {
     public class SearchProfile {
-        private long Id { get; set; }
+        [JsonIgnore]
+        public int Id { get; set; }
 
-        private List<string> Words { get; set; }
+        public List<string> Words { get; set; }
 
-        public SearchProfile(long id, List<string> words) {
+        public SearchProfile(int id, List<string> words) {
             this.Id = id;
             this.Words = words;
         }
