@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SearchDefinedWords.Models;
+using SearchDefinedWords.Data;
 using SearchDefinedWords.Services;
 
-namespace SearchDefinedWords.Controllers {
+namespace SearchDefinedWords.Controllers
+{
     [Route("api/[controller]")]
     [ApiController]
     public class SearchTextesController : ControllerBase {
@@ -15,8 +16,8 @@ namespace SearchDefinedWords.Controllers {
         }
 
         [HttpPost]
-        public List<string> SearchText([FromBody] SearchText searchText) {
-            return searchTextService.searchText();
+        public List<string> SearchText([FromForm] SearchTextDTO searchText) {
+            return searchTextService.SearchText(searchText);
         }
     }
 }

@@ -3,6 +3,7 @@
 namespace SearchDefinedWords.Services {
     public interface ISearchProfileService {
         public SearchProfile AddProfile(SearchProfile searchProfile);
-        IEnumerable<SearchProfile> getProfiles();
+        SearchProfile GetProfile(int profileId);
+        IEnumerable<SearchProfile> GetProfiles();
     }
 }

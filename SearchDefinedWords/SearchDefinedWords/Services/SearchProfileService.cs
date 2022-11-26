@@ -11,7 +11,7 @@ namespace SearchDefinedWords.Services {
             this.cacheIdKey = "currentId";
         }
 
-        public IEnumerable<SearchProfile> getProfiles() {
+        public IEnumerable<SearchProfile> GetProfiles() {
             if (cache.TryGetValue(this.cacheIdKey, out int cacheId)) {
                 return GetAllProfiles(cacheId);
             }
@@ -24,13 +24,6 @@ namespace SearchDefinedWords.Services {
 
             for (int i = 0; i <= highestId; i++) {
                 List<string> words = cache.Get<List<string>>(i);
-
-                /*
-                foreach (var word in words) {
-                    Console.WriteLine(word);
-                }
-                */
-
                 profiles.Add(new SearchProfile(highestId, words));
             }
 
@@ -71,6 +64,11 @@ namespace SearchDefinedWords.Services {
             }
 
             return cacheId;
+        }
+
+        public SearchProfile GetProfile(int profileId) {
+            List<string> words = cache.Get<List<string>>(profileId);
+            return new SearchProfile(profileId, words);
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿namespace SearchDefinedWords.Services {
+﻿using SearchDefinedWords.Data;
+
+namespace SearchDefinedWords.Services {
     public interface ISearchTextService {
-        List<string> searchText();
+        List<string> SearchText(SearchTextDTO searchText);
     }
 }

@@ -16,7 +16,7 @@ namespace SearchDefinedWords.Controllers {
 
         [HttpGet]
         public IEnumerable<SearchProfile> Get() {
-            return searchProfilesService.getProfiles();
+            return searchProfilesService.GetProfiles();
         }
 
         [HttpPost]
