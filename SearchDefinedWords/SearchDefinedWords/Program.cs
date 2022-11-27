@@ -1,3 +1,4 @@
+using SearchDefinedWords.Common;
 using SearchDefinedWords.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddScoped<ISearchProfileService, SearchProfileService>();
 builder.Services.AddScoped<ISearchTextService, SearchTextService>();
+builder.Services.AddScoped<CustomStringComparer>();
 builder.Services.AddMemoryCache();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
