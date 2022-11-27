@@ -2,7 +2,8 @@
 using SearchDefinedWords.Data;
 using SearchDefinedWords.Models;
 
-namespace SearchDefinedWords.Services {
+namespace SearchDefinedWords.Services
+{
     public class SearchTextService : ISearchTextService {
         private readonly ISearchProfileService searchProfileService;
         private CustomStringComparer comparer;
@@ -101,6 +102,7 @@ namespace SearchDefinedWords.Services {
         private List<string> GetWordsVertically(List<string> definedWords, List<string> data, int maxWordsCount, string direction) {
             List<string> words = new();
 
+            // parse data to WordPosition
             List<WordPosition> positions = ParseData(data, definedWords);
             List<WordPosition> foundWords = new();
 
@@ -111,17 +113,20 @@ namespace SearchDefinedWords.Services {
                     position.startIndex = comparer.IndexOf(data[i], word);
                     position.endIndex = position.startIndex + word.Length - 1;
 
+                    // if definedWord was found in data
                     if (position.startIndex != -1) {
                         break;
                     }
                 }
 
                 if (position.startIndex != -1) {
+                    // find words that are on top or bottom of definedWord
                     foundWords = positions.FindAll(x =>
                         CheckLine(position.line, x.line, direction) &&
                         CheckIndexes(position.startIndex, position.endIndex, x.startIndex, x.endIndex)
                     );
 
+                    // if any words found
                     if (foundWords.Count > 0) {
                         foundWords = foundWords.Take(maxWordsCount).ToList();
                         string wordToAdd = "";

@@ -1,4 +1,5 @@
-﻿namespace SearchDefinedWords.Data {
+﻿namespace SearchDefinedWords.Common
+{
     public enum DirectionType
     {
         left,

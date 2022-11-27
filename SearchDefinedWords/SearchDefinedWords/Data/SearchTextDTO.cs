@@ -1,4 +1,7 @@
-﻿namespace SearchDefinedWords.Data {
+﻿using SearchDefinedWords.Common;
+
+namespace SearchDefinedWords.Data
+{
     public class SearchTextDTO
     {
         public int ProfileId { get; set; }
